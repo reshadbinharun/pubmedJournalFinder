@@ -27,22 +27,30 @@ def getEachUrl(results):
 	return urls
 
 def parseAbstract(driver):
-	abstract = driver.find_element_by_xpath("//*[@id=\"maincontent\"]/div/div[5]/div/div[5]/div[2]/p") #xpath does not always give abstract location
+	#abstract = driver.find_element_by_xpath("//*[@id=\"maincontent\"]/div/div[5]/div/div[5]/div[2]/p") #xpath does not always give abstract location
+	abstract = driver.find_elements_by_tag_name("p")
+	abstractText = []
 	#cannot get text from abstract
-	print(abstract.text)
-	return
+	#add all text from abstract text
+	print(len(abstract))
+	for i in range(0, len(abstract) - 1):
+		if (len(abstract[i].text) > 0):
+			abstractText.append(abstract[i].text)
+			print("Printing obj {} {}".format(i, abstract[i].text))
+	return abstractText
 
 def getAbstracts(links, driver):
 
 	print("There are {} links being passed in".format(len(links)))
 	#for link in links:
+	allAbstracts = []
 	for url in links:	
 		#opening new tab
 		#driver.find_element_by_tag_name('body').send_keys(Keys.COMMAND + 't')
 		#url = link.get_attribute('href')
 		print(url)
 		driver.get(url)
-		parseAbstract(driver)
+		allAbstracts.append(parseAbstract(driver))
 		driver.implicitly_wait(5)
 		#driver.back()
 		#get abstract
@@ -68,6 +76,7 @@ def navigatePages(driver, pageLim):
 
 	#call all results
 	#back at end of result
+	#for i in range(1, pages2Nav-1):
 	for i in range(1, pages2Nav):
 		# #click next
 		# page = driver.find_element_by_xpath("//*[@id=\"EntrezSystem2.PEntrez.PubMed.Pubmed_ResultsPanel.Pubmed_Pager.Page\"]").click()
