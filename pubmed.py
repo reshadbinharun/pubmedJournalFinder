@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 
 #ISSUES:
 #driver goes stale
+#PERHAPS DRIVER IS PASSED BY REFERENCE
 
 #HELPER FUNCTIONS
 ###
@@ -26,7 +27,7 @@ def getEachUrl(results):
 	return urls
 
 def parseAbstract(driver):
-	abstract = driver.find_element_by_xpath("//*[@id=\"maincontent\"]/div/div[5]/div/div[5]/div[2]/p")
+	abstract = driver.find_element_by_xpath("//*[@id=\"maincontent\"]/div/div[5]/div/div[5]/div[2]/p") #xpath does not always give abstract location
 	#cannot get text from abstract
 	print(abstract.text)
 	return
@@ -34,22 +35,27 @@ def parseAbstract(driver):
 def getAbstracts(links, driver):
 
 	print("There are {} links being passed in".format(len(links)))
-	for link in links:
+	#for link in links:
+	for url in links:	
 		#opening new tab
 		#driver.find_element_by_tag_name('body').send_keys(Keys.COMMAND + 't')
-		url = link.get_attribute('href')
+		#url = link.get_attribute('href')
 		print(url)
 		driver.get(url)
 		parseAbstract(driver)
 		driver.implicitly_wait(5)
-		driver.back()
+		#driver.back()
 		#get abstract
 	return
 
 def getResultsOnPage(driver):
 	allSearch = driver.find_element_by_xpath("//*[@id=\"maincontent\"]/div/div[5]")
 	links = allSearch.find_elements_by_css_selector("a")
-	return links
+	link_urls = [link.get_attribute('href') for link in links if len(link.get_attribute('href')) < 50] #list comprehension to only include the smaller url
+	#link_urls = link_urls[0::2]
+	print(link_urls)
+	return link_urls
+	#return links
 
 
 def navigatePages(driver, pageLim):
