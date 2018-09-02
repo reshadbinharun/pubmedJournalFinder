@@ -1,0 +1,23 @@
+
+# Useful YouTube link: https://www.youtube.com/watch?v=6WpnxmmkYys
+
+# import csv of links | abstract 
+# technology search term is constant
+	# relevance score_1: lemmatize phrase and check what percentage of abstract it consists of 
+# application search term is to be lemmatized
+	# calculate same percentage
+
+'''
+Steps:
+1. Import data as csv
+2. Sentence processing, but removing all punctuations and stopwords
+'''
+import nltk
+import pandas as pd
+nltk.download()
+
+from nltk.corpus import stopwords
+
+#importing csv from local directory
+
+rawData = open('allAbstracts.csv').read()

@@ -1,12 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-#ISSUES:
-#driver goes stale
-#PERHAPS DRIVER IS PASSED BY REFERENCE
-
-#HELPER FUNCTIONS
-###
+#TO DO:
+'''
+1. catch exception on list comprehension
+2. export file as csv
+'''
 
 def searchEach(results):
 	links = []
@@ -22,7 +21,6 @@ def printEachLink(results):
 def getEachUrl(results):
 	urls = []
 	for link in results:
-		#url = link.get_attribute('href') #str has no attribute
 		driver.execute_script("window.open('" + link.get_attribute('href') +"');") #opens new window with script
 	return urls
 
@@ -36,10 +34,11 @@ def parseAbstract(driver):
 	for i in range(0, len(abstract) - 1):
 		if (len(abstract[i].text) > 0):
 			abstractText.append(abstract[i].text)
-			print("Printing obj {} {}".format(i, abstract[i].text))
+			#print("Printing obj {} {}".format(i, abstract[i].text))
 	return abstractText
 
-def getAbstracts(links, driver):
+# def getAbstracts(links, driver):
+def getAbstracts(links, driver, writer):
 
 	print("There are {} links being passed in".format(len(links)))
 	#for link in links:
@@ -51,10 +50,14 @@ def getAbstracts(links, driver):
 		print(url)
 		driver.get(url)
 		allAbstracts.append(parseAbstract(driver))
+
+		#writing to csv file:
+		writer.writerow([url, parseAbstract(driver)])	
+
 		driver.implicitly_wait(5)
 		#driver.back()
 		#get abstract
-	return
+	return allAbstracts
 
 def getResultsOnPage(driver):
 	allSearch = driver.find_element_by_xpath("//*[@id=\"maincontent\"]/div/div[5]")
@@ -66,8 +69,9 @@ def getResultsOnPage(driver):
 	#return links
 
 
-def navigatePages(driver, pageLim):
+def navigatePages(driver, pageLim, writer):
 	pageSelect = driver.find_element_by_xpath("//*[@id=\"pageno\"]")
+	res_page = driver.current_url
 	currPage = int(pageSelect.get_attribute("value"))
 	totalPages = int(pageSelect.get_attribute("last"))
 	pages2Nav = min(pageLim, totalPages)
@@ -77,6 +81,7 @@ def navigatePages(driver, pageLim):
 	#call all results
 	#back at end of result
 	#for i in range(1, pages2Nav-1):
+	all_abstracts = []
 	for i in range(1, pages2Nav):
 		# #click next
 		# page = driver.find_element_by_xpath("//*[@id=\"EntrezSystem2.PEntrez.PubMed.Pubmed_ResultsPanel.Pubmed_Pager.Page\"]").click()
@@ -89,10 +94,13 @@ def navigatePages(driver, pageLim):
 		print("current on page# {}".format(i))
 		links = getResultsOnPage(driver)
 		#printEachLink(links)
-		getAbstracts(links, driver)
+		#all_abstracts.append(getAbstracts(links, driver))
+		all_abstracts.append(getAbstracts(links, driver, writer))
 		driver.implicitly_wait(5)
+		driver.get(res_page)
 		#now click on results
 
+	# return all_abstracts
 	return
 ###
 #END OF HELPER FUNCTIONS
@@ -110,24 +118,20 @@ assert "PubMed" in driver.title
 #setting wait time before throwing an exception:
 driver.implicitly_wait(5)
 
+#Searching on PubMed Home
 driver.find_element_by_xpath("//*[@id=\"term\"]").send_keys(search_term)
 driver.find_element_by_xpath("//*[@id=\"search\"]").click()
 
 #RESULTS LOADED
-#test navigating pages
 
-navigatePages(driver, pageLim)
+#setting up csv export
+import csv
+csvfile = './allAbstracts.csv'
+with open(csvfile, "w") as output:
+	writer = csv.writer(output, lineterminator = '\n')
+	#abstract_array = navigatePages(driver, pageLim)
+	navigatePages(driver, pageLim, writer)
 
-# driver.implicitly_wait(5)
-
-# #getting all results on page:
-
-# links = getResultsOnPage(driver)
-# # allSearch = driver.find_element_by_xpath("//*[@id=\"maincontent\"]/div/div[5]")
-# # links = allSearch.find_elements_by_css_selector("a")
-
-# #For a single page
-# getAbstracts(getEachUrl(links[0:2]), driver)
 
 
 #to navigate pages: https://stackoverflow.com/questions/24166689/selenium-python-access-next-pages-of-search-results
