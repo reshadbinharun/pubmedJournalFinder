@@ -39,6 +39,9 @@ def sentenceProcess(text):
 	tokens = tokenize(no_punct)
 	no_stops = removeStops(tokens)
 	return no_stops
+
+def lemmatizeAbstract(text):
+	return [wn.lemmatize(word) for word in text] #entire array parsed, text is entire array, word is an item in list
 #HELPER FUNCTIONS
 
 
@@ -74,7 +77,17 @@ fullCorpus['no_punct'] = fullCorpus['abstract_text'].apply(lambda x: strip_punct
 fullCorpus['all_tokens'] = fullCorpus['no_punct'].apply(lambda x: tokenize(x))
 fullCorpus['no_stops'] = fullCorpus['all_tokens'].apply(lambda x: removeStops(x))
 
-print(fullCorpus.head())
 
+#WordNet Lemmatizer is more intelligent than porter
+wn = nltk.WordNetLemmatizer()
+ps = nltk.PorterStemmer()
+fullCorpus['lemmatized_text'] = fullCorpus['no_stops'].apply(lambda x: lemmatizeAbstract(x))
+
+print(fullCorpus.head())
 #list comprehension to rid of punctuations and stop words
+
+#exporting results as csv
+fullCorpus.to_csv('postAnalysis.csv', sep='\t', index=False)
+
+#Apply CountVectorizer to create document-term matrix
 
