@@ -14,10 +14,67 @@ Steps:
 '''
 import nltk
 import pandas as pd
-nltk.download()
+import numpy as numpy
+import string #to strip punctuations
+import re #to use regex parsing to tokenize words
+
+# nltk.download()
+
+#HELPER FUNCTIONS
+#returns a body of text with punctuations removed
+def strip_punct(text):
+	text = "".join([char for char in text if char not in string.punctuation])
+	return text
+
+def tokenize(text):
+	return re.split('\W+', text) # split at on non-word strings, + == continue until next word hit
+
+def removeStops(text):
+	stops = stopwords.words('english') # gettting the list of all stop words in 
+	noStops = [word for word in text if word not in stops]
+	return noStops
+
+def sentenceProcess(text):
+	no_punct = strip_punct(text)
+	tokens = tokenize(no_punct)
+	no_stops = removeStops(tokens)
+	return no_stops
+#HELPER FUNCTIONS
+
 
 from nltk.corpus import stopwords
 
 #importing csv from local directory
 
-rawData = open('allAbstracts.csv').read()
+# rawData = open('allAbstracts.csv').read()
+# print(rawData)
+# MAKE DATAFRAME INSTEAD
+
+fullCorpus = pd.read_csv('allAbstracts.csv')
+fullCorpus.columns = ['links', 'abstract_text']
+
+#flatten abstract_text column
+#https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html
+a = numpy.array(fullCorpus.abstract_text)
+flattened_text_arr = a.flatten()
+fullCorpus.abstract_text = flattened_text_arr
+
+#To confirm that the text arrays in abstract_text column have been flattened
+# for abstract in fullCorpus.abstract_text:
+# 	print(type(abstract))
+# 	print(len(abstract))
+
+# stripped_tokens = []
+# for abstract in fullCorpus.abstract_text: 
+# 	stripped_tokens.append(sentenceProcess(abstract))
+# fullCorpus['stripped_tokens'] = stripped_tokens
+
+#using lambda function instead of loops
+fullCorpus['no_punct'] = fullCorpus['abstract_text'].apply(lambda x: strip_punct(x))
+fullCorpus['all_tokens'] = fullCorpus['no_punct'].apply(lambda x: tokenize(x))
+fullCorpus['no_stops'] = fullCorpus['all_tokens'].apply(lambda x: removeStops(x))
+
+print(fullCorpus.head())
+
+#list comprehension to rid of punctuations and stop words
+
