@@ -17,7 +17,6 @@ import pandas as pd
 import numpy as numpy
 import string #to strip punctuations
 import re #to use regex parsing to tokenize words
-from textblob import TextBlob #to use built-in sentiment analysis trainer
 
 # nltk.download()
 
@@ -43,23 +42,6 @@ def sentenceProcess(text):
 
 def lemmatizeAbstract(text):
 	return [wn.lemmatize(word) for word in text] #entire array parsed, text is entire array, word is an item in list
-
-##FUNCTIONS FOR SENTIMENT ANALYSIS:
-
-def splitIntoSentences(text):
-	return [text.split('.')] # return array of sentences
-
-def calcSenti(sentences):
-	objAvg = 0.0
-	subjAvg = 0.0
-	objSum = 0.0
-	subjSum = 0.0
-	for line in sentences:
-		subjSum += TextBlob(line).sentiment.subjectivity
-		objSum += TextBlob(line).sentiment.polarity
-	objAvg = objSum/len(sentences)
-	subjAvg = subjSum/len(sentences)
-	return [objAvg, subjAvg]
 #HELPER FUNCTIONS
 
 
@@ -100,20 +82,6 @@ fullCorpus['no_stops'] = fullCorpus['all_tokens'].apply(lambda x: removeStops(x)
 wn = nltk.WordNetLemmatizer()
 ps = nltk.PorterStemmer()
 fullCorpus['lemmatized_text'] = fullCorpus['no_stops'].apply(lambda x: lemmatizeAbstract(x))
-
-#Sentiment Analysis
-allSentiments = []
-for abstract in fullCorpus['abstract_text']:
-	abs_sen = splitIntoSentences(abstract)
-	sentiments = calcSenti(abs_sen[0][0])
-	allSentiments.append(sentiments)
-# print(allSentiments[0])
-
-# [[0.0, 0.1], ...] -> format for allSentiments; split into subjectivity and objectivity
-
-# fullCorpus['subjectivity'] = allSentiments[1]
-# fullCorpus['objectivity'] = allSentiments[0]
-
 
 print(fullCorpus.head())
 #list comprehension to rid of punctuations and stop words
