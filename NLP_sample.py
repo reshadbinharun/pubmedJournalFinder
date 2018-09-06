@@ -60,6 +60,12 @@ def calcSenti(sentences):
 	objAvg = objSum/len(sentences)
 	subjAvg = subjSum/len(sentences)
 	return [objAvg, subjAvg]
+
+def clean_text(text):
+    text = "".join([word.lower() for word in text if word not in string.punctuation])
+    tokens = re.split('\W+', text)
+    text = [ps.stem(word) for word in tokens if word not in stopwords]
+    return text
 #HELPER FUNCTIONS
 
 
@@ -121,5 +127,13 @@ print(fullCorpus.head())
 #exporting results as csv
 fullCorpus.to_csv('postAnalysis.csv', sep='\t', index=False)
 
+##COMMENT OUT HERE ON DOWNWARDS :
+
+
 #Apply CountVectorizer to create document-term matrix
+from sklearn.feature_extraction.text import CountVectorizer
+count_vect = CountVectorizer(analyzer = clean_text)
+X_counts = count_vect.fit_transform(fullCorpus['abstract_text'])
+print(X_counts.shape)
+print(count_vect.get_feature_names())
 
