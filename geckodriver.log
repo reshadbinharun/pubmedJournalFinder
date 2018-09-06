@@ -1492,3 +1492,15 @@ See /usr/include/servers/bootstrap_defs.h for the error codes.
 2018-09-02 11:46:41.578 plugin-container[8226:1371276] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0x8b07, name = 'com.apple.tsm.portname'
 See /usr/include/servers/bootstrap_defs.h for the error codes.
 JavaScript warning: https://static.pubmed.gov/portal/portal3rc.fcgi/4179591/js/3812534/4087685/3812535/4155155/3990644/3812291/3908752/3879255/4121861/4076480/4001808.js, line 1197: unreachable code after return statement
+1536242059418	geckodriver	INFO	geckodriver 0.21.0
+1536242059430	geckodriver	INFO	Listening on 127.0.0.1:64735
+1536242060448	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "-marionette" "-foreground" "-no-remote" "-profile" "/var/folders/0y/x3rtnk3d19sfy3ty9x72zn9h0000gn/T/rust_mozprofile.yqnpT5zRQvpt"
+2018-09-06 09:54:22.033 plugin-container[16266:2915205] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0x7107, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+2018-09-06 09:54:22.301 plugin-container[16267:2915231] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0x8203, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+1536242062545	Marionette	INFO	Listening on port 64746
+1536242062610	Marionette	WARN	TLS certificate errors will be ignored for this session
+2018-09-06 09:54:24.029 plugin-container[16268:2915365] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0x8e33, name = 'com.apple.tsm.portname'
+See /usr/include/servers/bootstrap_defs.h for the error codes.
+JavaScript warning: https://static.pubmed.gov/portal/portal3rc.fcgi/4179591/js/3812534/4087685/3812535/4155155/3990644/3812291/3908752/3879255/4121861/4076480/4001808.js, line 1197: unreachable code after return statement

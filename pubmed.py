@@ -106,8 +106,8 @@ def navigatePages(driver, pageLim, writer):
 #END OF HELPER FUNCTIONS
 
 #USER INPUTS
-search_term = "soft tissue repair"
-pageLim = 10
+search_term = input("Enter search term: ")
+pageLim = int(input("Enter page limit: "))
 #
 #USER INPUTS
 

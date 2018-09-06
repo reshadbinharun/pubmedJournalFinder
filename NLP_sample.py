@@ -131,9 +131,9 @@ fullCorpus.to_csv('postAnalysis.csv', sep='\t', index=False)
 
 
 #Apply CountVectorizer to create document-term matrix
-from sklearn.feature_extraction.text import CountVectorizer
-count_vect = CountVectorizer(analyzer = clean_text)
-X_counts = count_vect.fit_transform(fullCorpus['abstract_text'])
-print(X_counts.shape)
-print(count_vect.get_feature_names())
+# from sklearn.feature_extraction.text import CountVectorizer
+# count_vect = CountVectorizer(analyzer = clean_text)
+# X_counts = count_vect.fit_transform(fullCorpus['abstract_text'])
+# print(X_counts.shape)
+# print(count_vect.get_feature_names())
 
